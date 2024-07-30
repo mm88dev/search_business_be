@@ -1,5 +1,6 @@
-const { formatOpeningHours } = require('../helpers');
-const { fetchSearchResults } = require('../services/search.service');
+const { formatOpeningHours } = require('../utils/helpers');
+const { fetchBusinessById } = require('../services/business.service');
+const CustomError = require('../utils/customError');
 
 const placesMap = new Map();
 
@@ -31,7 +32,6 @@ const mapData = async results => {
         .filter(website => !!website)
     });
   });
-  // add mapping for open hours
 };
 
 // helper:
@@ -62,8 +62,8 @@ const searchById = id => {
 
 exports.searchByNameOrAddress = async (req, res, next) => {
   const fetchedData = await Promise.all([
-    fetchSearchResults(process.env.PLACE_ID_1),
-    fetchSearchResults(process.env.PLACE_ID_2)
+    fetchBusinessById(process.env.PLACE_ID_1),
+    fetchBusinessById(process.env.PLACE_ID_2)
   ]);
 
   mapData(fetchedData);
@@ -78,13 +78,18 @@ exports.searchByNameOrAddress = async (req, res, next) => {
 
 exports.getById = async (req, res, next) => {
   const fetchedData = await Promise.all([
-    fetchSearchResults(process.env.PLACE_ID_1),
-    fetchSearchResults(process.env.PLACE_ID_2)
+    fetchBusinessById(process.env.PLACE_ID_1),
+    fetchBusinessById(process.env.PLACE_ID_2)
   ]);
+
+  if (!fetchedData) return new CustomError('Error fetching business', 500);
 
   mapData(fetchedData);
 
   const id = req.params.id;
+
+  const result = fetchBusinessById('234432');
+  if (!result) return new CustomError('Error fetchingd business', 500);
 
   const searchResult = searchById(id);
 

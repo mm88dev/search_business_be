@@ -1,31 +1,33 @@
-const express = require('express');
-const app = express();
-const port = 3000;
-const businessRouter = require('./routes/business.router');
-const cors = require('cors');
+require('colors');
+const http = require('http');
 
-// Load environment variables from the .env file
-require('dotenv').config();
-
-// Middleware to parse JSON request bodies
-app.use(express.json());
-
-app.use(
-  cors({
-    origin: 'http://localhost:5173',
-    method: ['GET']
-  })
-);
-
-// Use the search router for the /search route
-app.use('/api/businesses', businessRouter);
-
-// All other api routes
-app.all('/*', (req, res, next) => {
-  return next(new Error(`Can't find ${req.originalUrl} on this server!`, 404));
+// Error Handling - uncaughtException (sync code)
+process.on('uncaughtException', err => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...'.red.underline);
+  console.log(err);
+  console.log(err.name.blue, err.message.red.italic.inverse);
+  // shutdown application
+  process.exit(1);
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// Load app
+const app = require('./app');
+
+// 5) Start server
+const PORT = process.env.PORT || 3000;
+
+const server = http.createServer(app);
+server.listen(
+  PORT,
+  console.log(`Server running on port ${PORT}...`.yellow.bold)
+);
+
+// Error Handling - unhandled promise rejections (async code)
+process.on('unhandledRejection', err => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...'.red.underline);
+  console.log(err.name.blue, err.message.red.italic.inverse);
+  // shutdown application gracefully - server.close gives time to finish all requests
+  server.close(() => {
+    process.exit(1);
+  });
 });
