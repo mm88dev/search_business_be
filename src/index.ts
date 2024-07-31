@@ -1,6 +1,17 @@
 import 'colors';
 import http from 'http';
 
+// Load app
+import app from './app';
+
+// Start server
+const PORT = process.env.PORT || 3000;
+
+const server = http.createServer(app);
+server.listen(PORT, () =>
+  console.log(`Server running on port ${PORT}...`.yellow.bold)
+);
+
 // Error Handling - uncaughtException (sync code)
 process.on('uncaughtException', (err: Error) => {
   console.error('UNCAUGHT EXCEPTION! 💥 Shutting down...'.red.underline);
@@ -19,17 +30,6 @@ process.on('uncaughtException', (err: Error) => {
     process.exit(1);
   }
 });
-
-// Load app
-import app from './app';
-
-// 5) Start server
-const PORT = process.env.PORT || 3000;
-
-const server = http.createServer(app);
-server.listen(PORT, () =>
-  console.log(`Server running on port ${PORT}...`.yellow.bold)
-);
 
 // Error Handling - unhandled promise rejections (async code)
 process.on('unhandledRejection', (err: Error) => {

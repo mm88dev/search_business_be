@@ -4,6 +4,8 @@ import cors from 'cors';
 import CustomError from './utils/customError';
 import businessRouter from './routes/business.router';
 import errorHandler from './middleware/errorHandler';
+import hpp from 'hpp';
+import rateLimit from 'express-rate-limit';
 
 // LOAD ENVIRONMENT VARIABLES
 require('dotenv').config();
@@ -12,7 +14,7 @@ require('dotenv').config();
 const app = express();
 
 // MIDDLEWARES
-// Middleware to allow cross-origin requests
+// Allow cross-origin requests
 app.use(
   cors({
     origin: 'http://localhost:5173',
@@ -20,8 +22,21 @@ app.use(
   })
 );
 
-// Middleware to parse JSON request bodies
+// Limit request from the same IP address (in 5 minutes window to 100 requests)
+const limiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 100,
+  message: 'Too many search requests, please try again later.',
+  headers: true
+});
+// Apply the rate limiter to all routes
+app.use('/api', limiter);
+
+// Parse JSON request bodies
 app.use(express.json());
+
+// Prevent hpp param pollution
+app.use(hpp());
 
 // ROUTES
 app.use('/api/businesses', businessRouter);
