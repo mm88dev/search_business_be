@@ -23,13 +23,13 @@ To get started with this project, follow these steps:
 
 4. **Available Scripts:**
 
-  start: Starts the application in production mode.
+  yarn start: Starts the application in production mode.
 
-  build: Compiles TypeScript code to JavaScript.
+  yarn build: Compiles TypeScript code to JavaScript.
 
-  start:dev: Starts the application in development mode with live reloading.
+  yarn start:dev: Starts the application in development mode with live reloading.
 
-  test: Runs tests using Jest
+  yarn test: Runs tests using Jest
 
 5. **Dependencies:**
 
