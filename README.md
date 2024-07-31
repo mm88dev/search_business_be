@@ -8,11 +8,11 @@ To get started with this project, follow these steps:
 
 1. **Clone the Repository:**
 
-  git clone https://github.com/mm88dev/search_business_be.git
-  cd search_business_be
+  `git clone https://github.com/mm88dev/search_business_be.git`
+  `cd search_business_be`
 
 2. **Install Dependencies:**
-   yarn install
+   `yarn install`
 
 3. **Environment Variables:**
   Create a .env file in the root directory of the project to manage environment variables. Use the following example as a template:
@@ -23,13 +23,13 @@ To get started with this project, follow these steps:
 
 4. **Available Scripts:**
 
-  yarn start: Starts the application in production mode.
+  `yarn start`: Starts the application in production mode.
 
-  yarn build: Compiles TypeScript code to JavaScript.
+  `yarn build`: Compiles TypeScript code to JavaScript.
 
-  yarn start:dev: Starts the application in development mode with live reloading.
+  `yarn start:dev`: Starts the application in development mode with live reloading.
 
-  yarn test: Runs tests using Jest
+  `yarn test`: Runs tests using Jest
 
 5. **Dependencies:**
 
