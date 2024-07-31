@@ -6,8 +6,18 @@ process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...'.red.underline);
   console.log(err);
   console.log(err.name.blue, err.message.red.italic.inverse);
-  // shutdown application
-  process.exit(1);
+
+  // Attempt to gracefully shutdown the server
+  if (server) {
+    server.close(() => {
+      console.log('Server closed gracefully.'.green);
+      // Exit the process after closing the server
+      process.exit(1);
+    });
+  } else {
+    // If the server is not initialized, exit immediately
+    process.exit(1);
+  }
 });
 
 // Load app

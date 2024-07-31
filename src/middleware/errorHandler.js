@@ -1,8 +1,10 @@
+require('colors');
+
 const errorHandler = (err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
+  const statusCode = err.errorCode || 500;
   const message = err.message || 'Internal Server Error';
 
-  console.error(err);
+  console.error(err.stack.red);
 
   res.status(statusCode).json({
     status: 'error',
