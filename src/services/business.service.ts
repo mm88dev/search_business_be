@@ -1,4 +1,4 @@
-import { PlaceData } from '../types';
+import { PlaceData } from '../types/data.types';
 import CustomError from '../utils/customError';
 import { fetchBusinessById } from './api.service';
 import { getPlaces, mapData } from './data.service';

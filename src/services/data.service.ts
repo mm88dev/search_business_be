@@ -1,4 +1,5 @@
-import { PlaceData, BusinessApiResponse } from '../types';
+import { BusinessApiResponse } from '../types/api.types';
+import { PlaceData } from '../types/data.types';
 import { formatOpeningHours } from '../utils/helpers';
 
 const places = new Map<string, PlaceData>();

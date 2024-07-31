@@ -130,13 +130,15 @@ interface ApiSource {
 interface ApiOpeningHour {
   start: string;
   end: string;
-  type: string;
+  type: 'OPEN' | 'CLOSED';
 }
 
 export interface ApiOpeningHours {
   days: {
     [key: string]: ApiOpeningHour[];
   };
+  closed_on_holidays?: boolean;
+  open_by_arrangement?: boolean;
 }
 
 export interface BusinessApiResponse {
@@ -155,17 +157,4 @@ export interface BusinessApiResponse {
   creation_date: string;
   modified_date: string;
   _update_process_type: string;
-}
-
-export interface FormattedOpeningHours {
-  [day: string]: string[];
-}
-
-export interface PlaceData {
-  id: string;
-  name: string;
-  address: string;
-  openingHours: FormattedOpeningHours[];
-  phoneNumbers: string[];
-  websites: string[];
 }

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import CustomError from '../utils/customError';
-import { BusinessApiResponse } from '../types';
+import { BusinessApiResponse } from '../types/api.types';
 
 export const fetchBusinessById = async (place_id: string) => {
   const url = `${process.env.API_URL}/${place_id}`;

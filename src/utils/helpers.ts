@@ -1,4 +1,13 @@
-import { ApiOpeningHours, FormattedOpeningHours } from '../types';
+import { ApiOpeningHours } from '../types/api.types';
+import { FormattedOpeningHours } from '../types/data.types';
+
+const formatTimeRange = (
+  ranges: { start: string; end: string }[]
+): string[] => {
+  return ranges.length > 0
+    ? ranges.map(range => `${range.start} - ${range.end}`)
+    : ['closed'];
+};
 
 export const formatOpeningHours = (
   openingHours: ApiOpeningHours
@@ -18,20 +27,14 @@ export const formatOpeningHours = (
 
   const formattedHours: FormattedOpeningHours[] = [];
 
-  // Helper function to format time ranges
-  const formatTimeRange = (
-    ranges: { start: string; end: string }[]
-  ): string[] => {
-    return ranges.map(range => `${range.start} - ${range.end}`);
-  };
-
   // Combine opening hours for weekdays
   const weekdayHours: string[][] = weekdays.map(day => {
-    return openingHours.days[day]
+    return openingHours.days[day] && openingHours.days[day].length > 0
       ? formatTimeRange(openingHours.days[day])
       : ['closed'];
   });
 
+  // Check if all weekdays have the same hours
   const sameHours = weekdayHours.every(
     hours => hours.join(',') === weekdayHours[0].join(',')
   );
@@ -46,9 +49,10 @@ export const formatOpeningHours = (
     let currentHours: string[] = [];
 
     weekdays.forEach((day, index) => {
-      const hours = openingHours.days[day]
-        ? formatTimeRange(openingHours.days[day])
-        : ['closed'];
+      const hours =
+        openingHours.days[day] && openingHours.days[day].length > 0
+          ? formatTimeRange(openingHours.days[day])
+          : ['closed'];
 
       if (currentHours.length === 0) {
         currentRange.push(dayMap[day]);
@@ -82,7 +86,7 @@ export const formatOpeningHours = (
 
   // Add weekends
   weekends.forEach(day => {
-    if (openingHours.days[day]) {
+    if (openingHours.days[day] && openingHours.days[day].length > 0) {
       formattedHours.push({
         [dayMap[day]]: formatTimeRange(openingHours.days[day])
       });
