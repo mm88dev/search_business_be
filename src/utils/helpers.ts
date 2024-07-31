@@ -1,5 +1,9 @@
-exports.formatOpeningHours = openningHours => {
-  const dayMap = {
+import { ApiOpeningHours, FormattedOpeningHours } from '../types';
+
+export const formatOpeningHours = (
+  openingHours: ApiOpeningHours
+): FormattedOpeningHours[] => {
+  const dayMap: Record<string, string> = {
     monday: 'Monday',
     tuesday: 'Tuesday',
     wednesday: 'Wednesday',
@@ -12,17 +16,19 @@ exports.formatOpeningHours = openningHours => {
   const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
   const weekends = ['saturday', 'sunday'];
 
-  const formattedHours = [];
+  const formattedHours: FormattedOpeningHours[] = [];
 
   // Helper function to format time ranges
-  function formatTimeRange(ranges) {
+  const formatTimeRange = (
+    ranges: { start: string; end: string }[]
+  ): string[] => {
     return ranges.map(range => `${range.start} - ${range.end}`);
-  }
+  };
 
   // Combine opening hours for weekdays
-  const weekdayHours = weekdays.map(day => {
-    return openningHours.days[day]
-      ? formatTimeRange(openningHours.days[day])
+  const weekdayHours: string[][] = weekdays.map(day => {
+    return openingHours.days[day]
+      ? formatTimeRange(openingHours.days[day])
       : ['closed'];
   });
 
@@ -36,12 +42,12 @@ exports.formatOpeningHours = openningHours => {
         weekdayHours[0]
     });
   } else {
-    let currentRange = [];
-    let currentHours = [];
+    let currentRange: string[] = [];
+    let currentHours: string[] = [];
 
     weekdays.forEach((day, index) => {
-      const hours = openningHours.days[day]
-        ? formatTimeRange(openningHours.days[day])
+      const hours = openingHours.days[day]
+        ? formatTimeRange(openingHours.days[day])
         : ['closed'];
 
       if (currentHours.length === 0) {
@@ -76,9 +82,9 @@ exports.formatOpeningHours = openningHours => {
 
   // Add weekends
   weekends.forEach(day => {
-    if (openningHours.days[day]) {
+    if (openingHours.days[day]) {
       formattedHours.push({
-        [dayMap[day]]: formatTimeRange(openningHours.days[day])
+        [dayMap[day]]: formatTimeRange(openingHours.days[day])
       });
     } else {
       formattedHours.push({ [dayMap[day]]: ['closed'] });

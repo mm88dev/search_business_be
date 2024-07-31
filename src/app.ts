@@ -1,9 +1,9 @@
-require('express-async-errors');
-const express = require('express');
-const cors = require('cors');
-const businessRouter = require('./routes/business.router');
-const errorHandler = require('./middleware/errorHandler');
-const CustomError = require('./utils/customError');
+import 'express-async-errors';
+import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+import CustomError from './utils/customError';
+import businessRouter from './routes/business.router';
+import errorHandler from './middleware/errorHandler';
 
 // LOAD ENVIRONMENT VARIABLES
 require('dotenv').config();
@@ -16,7 +16,7 @@ const app = express();
 app.use(
   cors({
     origin: 'http://localhost:5173',
-    method: ['GET']
+    methods: ['GET']
   })
 );
 
@@ -25,7 +25,7 @@ app.use(express.json());
 
 // ROUTES
 app.use('/api/businesses', businessRouter);
-app.all('/*', (req, res, next) => {
+app.all('/*', (req: Request, res: Response, next: NextFunction) => {
   return next(
     new CustomError(`Can't find ${req.originalUrl} on this server!`, 404)
   );
@@ -34,4 +34,4 @@ app.all('/*', (req, res, next) => {
 // ERROR HANDLING
 app.use(errorHandler);
 
-module.exports = app;
+export default app;

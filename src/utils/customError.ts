@@ -1,5 +1,7 @@
 class CustomError extends Error {
-  constructor(message, errorCode) {
+  public errorCode: number;
+
+  constructor(message: string, errorCode: number) {
     super(message);
     this.name = this.constructor.name;
     this.errorCode = errorCode;
@@ -7,4 +9,4 @@ class CustomError extends Error {
   }
 }
 
-module.exports = CustomError;
+export default CustomError;

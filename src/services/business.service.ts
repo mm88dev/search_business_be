@@ -1,7 +1,9 @@
-const { fetchBusinessById } = require('./api.service');
-const { mapData, getPlaces } = require('./data.service');
+import { PlaceData } from '../types';
+import CustomError from '../utils/customError';
+import { fetchBusinessById } from './api.service';
+import { getPlaces, mapData } from './data.service';
 
-exports.searchById = id => {
+export const searchById = (id: string): PlaceData | null => {
   for (const [key, placeData] of getPlaces().entries()) {
     if (placeData.id === id) {
       return placeData;
@@ -10,10 +12,10 @@ exports.searchById = id => {
   return null;
 };
 
-exports.searchPlaces = searchTerm => {
+export const searchPlaces = (searchTerm: string): PlaceData[] => {
   // Normalize the search term
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-  const results = [];
+  const results: PlaceData[] = [];
 
   for (const [key, placeData] of getPlaces().entries()) {
     if (key.includes(normalizedSearchTerm)) {
@@ -24,13 +26,13 @@ exports.searchPlaces = searchTerm => {
   return results;
 };
 
-exports.syncPlacesData = async () => {
+export const syncPlacesData = async (): Promise<void | CustomError> => {
   if (getPlaces().size > 0) return;
   // console.count('Fetching business data');
 
   const fetchedPlaces = await Promise.all([
-    fetchBusinessById(process.env.PLACE_ID_1),
-    fetchBusinessById(process.env.PLACE_ID_2)
+    fetchBusinessById(process.env.PLACE_ID_1 as string),
+    fetchBusinessById(process.env.PLACE_ID_2 as string)
   ]);
 
   if (!fetchedPlaces) return new CustomError('Error fetching business', 500);
