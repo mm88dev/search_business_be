@@ -2,8 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import CustomError from '../utils/customError';
 import {
   syncPlacesData,
-  searchPlaces,
-  searchById
+  // searchPlaces,
+  searchById,
+  searchPlacesUsingFuse
 } from '../services/business.service';
 
 export const searchByNameOrAddress = async (
@@ -16,7 +17,11 @@ export const searchByNameOrAddress = async (
   const query = req.query.q as string | undefined;
   if (!query) return next(new CustomError('Missing query parameter', 400));
 
-  const searchResult = searchPlaces(query);
+  // option 1 (regular js includes method)
+  // const searchResult = searchPlaces(query);
+
+  // option 2 (fuse.js library)
+  const searchResult = searchPlacesUsingFuse(query);
 
   res.status(200).send({ status: 'success', data: searchResult });
 };

@@ -1,3 +1,4 @@
+import Fuse from 'fuse.js';
 import { PlaceData } from '../types/data.types';
 import CustomError from '../utils/customError';
 import { fetchBusinessById } from './api.service';
@@ -12,8 +13,8 @@ export const searchById = (id: string): PlaceData | null => {
   return null;
 };
 
+// Search option 1: using reguler js includes method
 export const searchPlaces = (searchTerm: string): PlaceData[] => {
-  // Normalize the search term
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
   const results: PlaceData[] = [];
 
@@ -24,6 +25,20 @@ export const searchPlaces = (searchTerm: string): PlaceData[] => {
   }
 
   return results;
+};
+
+// Search option 2: using fuse.js library
+export const searchPlacesUsingFuse = (searchTerm: string): PlaceData[] => {
+  const places = Array.from(getPlaces().values());
+
+  const fuse = new Fuse(places, {
+    keys: ['name', 'address'],
+    threshold: 0.4
+  });
+
+  const results = fuse.search(searchTerm);
+
+  return results.map(result => result.item);
 };
 
 export const syncPlacesData = async (): Promise<void | CustomError> => {

@@ -1,5 +1,21 @@
-import { ApiOpeningHours } from '../types/api.types';
+import { ApiContact, ApiOpeningHours } from '../types/api.types';
 import { FormattedOpeningHours } from '../types/data.types';
+
+export const formatPhoneNumbers = (contacts: ApiContact[]) => {
+  return contacts
+    .filter(contact => contact.contact_type === 'phone')
+    .map(contact =>
+      contact.formatted_service_code
+        ? `+41 ${contact.formatted_service_code}`
+        : ''
+    );
+};
+
+export const formatWebsites = (contacts: ApiContact[]) => {
+  return contacts
+    .filter(contact => contact.contact_type === 'url')
+    .map(contact => contact.url || '');
+};
 
 const formatTimeRange = (
   ranges: { start: string; end: string }[]

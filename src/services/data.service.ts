@@ -1,6 +1,10 @@
 import { BusinessApiResponse } from '../types/api.types';
 import { PlaceData } from '../types/data.types';
-import { formatOpeningHours } from '../utils/helpers';
+import {
+  formatOpeningHours,
+  formatPhoneNumbers,
+  formatWebsites
+} from '../utils/helpers';
 
 const places = new Map<string, PlaceData>();
 
@@ -17,16 +21,8 @@ export const mapData = async (
       name: result.displayed_what,
       address: result.displayed_where,
       openingHours: formatOpeningHours(result.opening_hours),
-      phoneNumbers: result.addresses[0].contacts
-        .filter(contact => contact.contact_type === 'phone')
-        .map(contact =>
-          contact.formatted_service_code
-            ? `+41 ${contact.formatted_service_code}`
-            : ''
-        ),
-      websites: result.addresses[0].contacts
-        .filter(contact => contact.contact_type === 'url')
-        .map(contact => contact.url || '')
+      phoneNumbers: formatPhoneNumbers(result.addresses[0].contacts),
+      websites: formatWebsites(result.addresses[0].contacts)
     });
   });
 };

@@ -33,7 +33,7 @@ interface ApiAddressWhere {
   zipcode: number;
 }
 
-interface ApiContact {
+export interface ApiContact {
   _class: string;
   contact_type: string;
   service_code: string;

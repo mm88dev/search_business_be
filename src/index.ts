@@ -14,7 +14,7 @@ server.listen(PORT, () =>
 
 // Error Handling - uncaughtException (sync code)
 process.on('uncaughtException', (err: Error) => {
-  console.error('UNCAUGHT EXCEPTION! 💥 Shutting down...'.red.underline);
+  console.error('UNCAUGHT EXCEPTION! Shutting down...'.red.underline);
   console.error(err);
   console.error(err.name.blue, err.message.red.italic.inverse);
 
@@ -33,9 +33,9 @@ process.on('uncaughtException', (err: Error) => {
 
 // Error Handling - unhandled promise rejections (async code)
 process.on('unhandledRejection', (err: Error) => {
-  console.error('UNHANDLED REJECTION! 💥 Shutting down...'.red.underline);
+  console.error('UNHANDLED REJECTION! Shutting down...'.red.underline);
   console.error(err.name.blue, err.message.red.italic.inverse);
-  // shutdown application gracefully - server.close gives time to finish all requests
+  // shutdown application gracefully
   server.close(() => {
     process.exit(1);
   });

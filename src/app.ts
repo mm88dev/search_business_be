@@ -7,13 +7,13 @@ import errorHandler from './middleware/errorHandler';
 import hpp from 'hpp';
 import rateLimit from 'express-rate-limit';
 
-// LOAD ENVIRONMENT VARIABLES
+// Load environment variables
 require('dotenv').config();
 
-// START EXPRESS
+// Start express app
 const app = express();
 
-// MIDDLEWARES
+// Middlewares
 // Allow cross-origin requests
 app.use(
   cors({
@@ -29,16 +29,16 @@ const limiter = rateLimit({
   message: 'Too many search requests, please try again later.',
   headers: true
 });
-// Apply the rate limiter to all routes
+
 app.use('/api', limiter);
 
-// Parse JSON request bodies
+// Body parser, reading data from body into req.body
 app.use(express.json());
 
 // Prevent hpp param pollution
 app.use(hpp());
 
-// ROUTES
+// Routes
 app.use('/api/businesses', businessRouter);
 app.all('/*', (req: Request, res: Response, next: NextFunction) => {
   return next(
@@ -46,7 +46,7 @@ app.all('/*', (req: Request, res: Response, next: NextFunction) => {
   );
 });
 
-// ERROR HANDLING
+// Error handling middleware
 app.use(errorHandler);
 
 export default app;
